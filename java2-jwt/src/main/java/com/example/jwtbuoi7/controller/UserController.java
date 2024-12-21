@@ -6,6 +6,8 @@ import com.example.jwtbuoi7.service.JwtService;
 import com.example.jwtbuoi7.service.UserInfoDetails;
 import com.example.jwtbuoi7.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,18 +45,33 @@ public class UserController {
         return "Welcome this endpoint is not secure";
     }
 
+//    @PostMapping("/addNewUser")
+//    public String addNewUser(@RequestBody UserInfo userInfo) {
+//        // Kiểm tra xem email đã tồn tại trong database hay chưa
+//        if (service.isEmailExist(userInfo.getEmail())) {
+//            return "Email is already exist";
+//        }
+//
+//        if (userInfo.getRoles() == null || userInfo.getRoles().isEmpty()) {
+//            userInfo.setRoles("ROLE_USER");
+//        }
+//
+//        return service.addUser(userInfo);
+//    }
+
     @PostMapping("/addNewUser")
-    public String addNewUser(@RequestBody UserInfo userInfo) {
+    public ResponseEntity<String> addNewUser(@RequestBody UserInfo userInfo) {
         // Kiểm tra xem email đã tồn tại trong database hay chưa
         if (service.isEmailExist(userInfo.getEmail())) {
-            return "Email is already exist";
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists");
         }
 
         if (userInfo.getRoles() == null || userInfo.getRoles().isEmpty()) {
             userInfo.setRoles("ROLE_USER");
         }
 
-        return service.addUser(userInfo);
+        String result = service.addUser(userInfo);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/getAllUserDetails")

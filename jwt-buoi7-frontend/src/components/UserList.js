@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { userService } from '../services/userService';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 
 const UserList = () => {
     const [userList, setUserList] = useState([]);
@@ -23,18 +24,33 @@ const UserList = () => {
         fetchUserList();
     }, []);
 
-    if (!userList.length) return <p>Loading...</p>;
+    if (!userList.length) return <p>Access denied</p>;
 
     return (
         <div>
-            <h2>All Users</h2>
-            <ul>
-                {userList.map(user => (
-                    <li key={user.email}>
-                        {user.username} - {user.email} - {user.roles}
-                    </li>
-                ))}
-            </ul>
+            <Typography variant="h4" align="center" gutterBottom>
+                User List
+            </Typography>
+            <TableContainer component={Paper} style={{ marginTop: '20px' }}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center">Username</TableCell>
+                            <TableCell align="center">Email</TableCell>
+                            <TableCell align="center">Roles</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {userList.map(user => (
+                            <TableRow key={user.email}>
+                                <TableCell align="center">{user.username}</TableCell>
+                                <TableCell align="center">{user.email}</TableCell>
+                                <TableCell align="center">{user.roles}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </div>
     );
 };

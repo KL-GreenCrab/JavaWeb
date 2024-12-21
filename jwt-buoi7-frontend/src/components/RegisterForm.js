@@ -10,10 +10,13 @@ const RegisterForm = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
-    const navigate = useNavigate(); // Thay thế useHistory bằng useNavigate
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(''); // Clear previous errors
+        setMessage('');
+
         if (password !== confirmPassword) {
             setError('Passwords do not match');
             return;
@@ -21,10 +24,14 @@ const RegisterForm = () => {
 
         try {
             const response = await userService.registerUser({ name, email, password });
-            setMessage(response);
-            navigate('/login'); // Redirect to login page after successful registration
+            setMessage('Registration successful');
+            navigate('/login');
         } catch (err) {
-            setError(err.response ? err.response.data : 'Registration failed');
+            if (err.response && err.response.status === 409) {
+                setError('Email already exists'); // Handle email conflict error
+            } else {
+                setError('Registration failed. Please try again.');
+            }
         }
     };
 

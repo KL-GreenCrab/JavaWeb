@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { userService } from '../services/userService';
-import { Container, Typography, CircularProgress, Card, CardContent, CardActions, Button } from '@mui/material';
+import { Container, Typography, CircularProgress, Card, CardContent, CardActions, Button, Divider } from '@mui/material';
 
 const UserProfile = () => {
     const [userInfo, setUserInfo] = useState(null);
@@ -24,7 +24,7 @@ const UserProfile = () => {
 
     if (!userInfo) {
         return (
-            <Container>
+            <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                 <CircularProgress /> {/* Hiển thị loading spinner */}
             </Container>
         );
@@ -34,17 +34,24 @@ const UserProfile = () => {
     const rolesDisplay = Array.isArray(userInfo.roles) ? userInfo.roles.join(', ') : 'N/A';
 
     return (
-        <Container maxWidth="md" style={{ marginTop: '30px' }}>
+        <Container maxWidth="md" style={{ marginTop: '30px', padding: '20px' }}>
             <Card>
                 <CardContent>
-                    <Typography variant="h5" gutterBottom>
+                    <Typography variant="h5" gutterBottom align="center" color="primary">
                         User Profile
                     </Typography>
-                    <Typography variant="subtitle1">Username: {userInfo.name}</Typography>
-                    <Typography variant="subtitle1">Email: {userInfo.email}</Typography>
-                    <Typography variant="subtitle1">Roles: {userInfo.roles}</Typography>
+                    <Divider style={{ margin: '20px 0' }} />
+                    <Typography variant="subtitle1" gutterBottom align="center">
+                        <strong>Username:</strong> {userInfo.name}
+                    </Typography>
+                    <Typography variant="subtitle1" gutterBottom align="center">
+                        <strong>Email:</strong> {userInfo.email}
+                    </Typography>
+                    <Typography variant="subtitle1" align="center">
+                        <strong>Roles:</strong> {rolesDisplay}
+                    </Typography>
                 </CardContent>
-                <CardActions>
+                <CardActions style={{ justifyContent: 'center' }}>
                     <Button 
                         variant="contained" 
                         color="primary" 
